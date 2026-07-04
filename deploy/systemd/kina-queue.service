@@ -1,0 +1,36 @@
+# ============================================================
+#  Kina · Worker de colas (systemd) — OPCIONAL
+#  Solo necesario si cambias QUEUE_CONNECTION de 'sync' a 'database'.
+#  Con 'sync' (por defecto en el MVP) NO hace falta activarlo.
+#
+#  Instalar:
+#    sudo cp deploy/systemd/kina-queue.service /etc/systemd/system/
+#    sudo systemctl daemon-reload
+#    sudo systemctl enable --now kina-queue.service
+#  Ver estado / logs:
+#    systemctl status kina-queue.service
+#    journalctl -u kina-queue.service -f
+#
+#  Ajusta User/Group y WorkingDirectory a tu instalación.
+#  (User debe poder leer/escribir storage/ y el .env; NO uses root.)
+# ============================================================
+
+[Unit]
+Description=Kina queue worker
+After=network.target mariadb.service
+Wants=mariadb.service
+
+[Service]
+Type=simple
+User=kina
+Group=nginx
+WorkingDirectory=/var/www/kina
+# --sleep evita busy-loop; --tries reintenta; --max-time recicla el proceso.
+ExecStart=/usr/bin/php /var/www/kina/artisan queue:work --sleep=3 --tries=3 --max-time=3600
+Restart=always
+RestartSec=5
+# Recarga suave: al desplegar puedes hacer `php artisan queue:restart`.
+StartLimitIntervalSec=0
+
+[Install]
+WantedBy=multi-user.target
