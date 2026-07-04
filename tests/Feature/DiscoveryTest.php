@@ -142,8 +142,12 @@ class DiscoveryTest extends TestCase
         $this->assertDatabaseHas('connection_requests', ['id' => $req->id, 'status' => 'accepted']);
 
         [$one, $two] = $me->id < $other->id ? [$me->id, $other->id] : [$other->id, $me->id];
-        $this->assertDatabaseHas('connections', ['user_one_id' => $one, 'user_two_id' => $two]);
-        $this->assertDatabaseHas('conversations', []);
+        $connection = \App\Models\Connection::where('user_one_id', $one)->where('user_two_id', $two)->first();
+        $this->assertNotNull($connection, 'Debe existir la conexión entre ambos.');
+
+        // La conversación debe quedar ligada a ESA conexión.
+        $this->assertDatabaseHas('conversations', ['connection_id' => $connection->id]);
+        $this->assertSame(1, $connection->conversation()->count());
     }
 
     public function test_puede_rechazar_solicitud(): void
