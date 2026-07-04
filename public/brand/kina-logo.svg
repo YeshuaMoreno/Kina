@@ -1,0 +1,10 @@
+<svg width="360" height="120" viewBox="0 0 360 120" fill="none" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Kina — Conecta a tu propio ritmo">
+  <!-- Símbolo órbita -->
+  <g>
+    <circle cx="60" cy="60" r="40" stroke="#9A8C98" stroke-width="6" fill="none"/>
+    <circle cx="60" cy="60" r="9" fill="#4A4E69"/>
+    <circle cx="60" cy="20" r="11" fill="#C9ADA7"/>
+  </g>
+  <!-- Wordmark -->
+  <text x="126" y="79" font-family="'Lora', Georgia, 'Times New Roman', serif" font-size="62" font-weight="600" letter-spacing="1" fill="#4A4E69">Kina</text>
+</svg>

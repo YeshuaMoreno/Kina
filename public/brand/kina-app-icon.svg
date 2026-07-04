@@ -1,0 +1,15 @@
+<svg width="512" height="512" viewBox="0 0 512 512" fill="none" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Kina">
+  <defs>
+    <linearGradient id="kinaTile" x1="0" y1="0" x2="512" y2="512" gradientUnits="userSpaceOnUse">
+      <stop stop-color="#4A4E69"/>
+      <stop offset="1" stop-color="#22223B"/>
+    </linearGradient>
+  </defs>
+  <rect width="512" height="512" rx="116" fill="url(#kinaTile)"/>
+  <!-- Órbita: conecta a tu propio ritmo -->
+  <circle cx="256" cy="256" r="134" stroke="#F2E9E4" stroke-opacity="0.45" stroke-width="14" fill="none"/>
+  <!-- Punto propio -->
+  <circle cx="256" cy="256" r="27" fill="#F2E9E4"/>
+  <!-- Punto que orbita -->
+  <circle cx="256" cy="122" r="34" fill="#C9ADA7"/>
+</svg>
