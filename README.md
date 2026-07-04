@@ -1,59 +1,109 @@
-<p align="center"><a href="https://laravel.com" target="_blank"><img src="https://raw.githubusercontent.com/laravel/art/master/logo-lockup/5%20SVG/2%20CMYK/1%20Full%20Color/laravel-logolockup-cmyk-red.svg" width="400" alt="Laravel Logo"></a></p>
+# Kina
 
-<p align="center">
-<a href="https://github.com/laravel/framework/actions"><img src="https://github.com/laravel/framework/workflows/tests/badge.svg" alt="Build Status"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/dt/laravel/framework" alt="Total Downloads"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/v/laravel/framework" alt="Latest Stable Version"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/l/laravel/framework" alt="License"></a>
-</p>
+**Conecta a tu propio ritmo.**
 
-## About Laravel
+Kina es una plataforma para mayores de 18 años donde personas neurodivergentes, introvertidas
+o con estilos de comunicación distintos encuentran amistad, pareja, algo casual o comunidad
+según sus intereses, su intención y cómo prefieren comunicarse. Sin swipes, sin prisas.
 
-Laravel is a web application framework with expressive, elegant syntax. We believe development must be an enjoyable and creative experience to be truly fulfilling. Laravel takes the pain out of development by easing common tasks used in many web projects, such as:
+## Stack
 
-- [Simple, fast routing engine](https://laravel.com/docs/routing).
-- [Powerful dependency injection container](https://laravel.com/docs/container).
-- Multiple back-ends for [session](https://laravel.com/docs/session) and [cache](https://laravel.com/docs/cache) storage.
-- Expressive, intuitive [database ORM](https://laravel.com/docs/eloquent).
-- Database agnostic [schema migrations](https://laravel.com/docs/migrations).
-- [Robust background job processing](https://laravel.com/docs/queues).
-- [Real-time event broadcasting](https://laravel.com/docs/broadcasting).
+- **Laravel 12** (PHP 8.2+) · Blade · **Tailwind CSS** · Alpine.js · Laravel Breeze
+- **MySQL / MariaDB** · Eloquent · Migrations · Seeders · Form Requests · Middleware
+- Chat básico **sin WebSockets** (polling controlado)
+- Pruebas con **PHPUnit** (67+ tests)
 
-Laravel is accessible, powerful, and provides tools required for large, robust applications.
+## Funcionalidad (MVP)
 
-## Learning Laravel
+Landing · Registro/Login · Onboarding en 7 pasos (con confirmación 18+ y consentimientos) ·
+Perfiles con intereses, preferencias de comunicación y etiquetas sensibles opcionales ·
+Descubrimiento con **Áreas de Sintonía** · Solicitudes de conexión · Chat entre conexiones ·
+Bloqueos · Reportes · Panel de administración y moderación.
 
-Laravel has the most extensive and thorough [documentation](https://laravel.com/docs) and video tutorial library of all modern web application frameworks, making it a breeze to get started with the framework. You can also check out [Laravel Learn](https://laravel.com/learn), where you will be guided through building a modern Laravel application.
+---
 
-If you don't feel like reading, [Laracasts](https://laracasts.com) can help. Laracasts contains thousands of video tutorials on a range of topics including Laravel, modern PHP, unit testing, and JavaScript. Boost your skills by digging into our comprehensive video library.
+## Desarrollo local (Windows / dev)
 
-## Laravel Sponsors
+Requisitos: PHP 8.2+, Composer, Node 18+, MySQL/MariaDB.
 
-We would like to extend our thanks to the following sponsors for funding Laravel development. If you are interested in becoming a sponsor, please visit the [Laravel Partners program](https://partners.laravel.com).
+```bash
+# Dependencias
+composer install
+npm install
 
-### Premium Partners
+# Entorno
+cp .env.example .env        # (Windows: copy .env.example .env)
+php artisan key:generate
+# Ajusta DB_* en .env y crea la base 'kina'
 
-- **[Vehikl](https://vehikl.com)**
-- **[Tighten Co.](https://tighten.co)**
-- **[Kirschbaum Development Group](https://kirschbaumdevelopment.com)**
-- **[64 Robots](https://64robots.com)**
-- **[Curotec](https://www.curotec.com/services/technologies/laravel)**
-- **[DevSquad](https://devsquad.com/hire-laravel-developers)**
-- **[Redberry](https://redberry.international/laravel-development)**
-- **[Active Logic](https://activelogic.com)**
+# Base de datos + datos base
+php artisan migrate --seed
 
-## Contributing
+# Assets + servidor
+npm run dev                 # en una terminal (hot reload)
+php artisan serve           # en otra -> http://127.0.0.1:8000
+```
 
-Thank you for considering contributing to the Laravel framework! The contribution guide can be found in the [Laravel documentation](https://laravel.com/docs/contributions).
+Usuarios de prueba sembrados: `admin@kina.local` y `test@kina.local` (contraseña `password`).
+**Cámbialos antes de exponer el servidor.**
 
-## Code of Conduct
+### Tests
 
-In order to ensure that the Laravel community is welcoming to all, please review and abide by the [Code of Conduct](https://laravel.com/docs/contributions#code-of-conduct).
+```bash
+php artisan test            # suite completa (SQLite en memoria, no toca tu DB)
+```
 
-## Security Vulnerabilities
+---
 
-If you discover a security vulnerability within Laravel, please send an e-mail to Taylor Otwell via [taylor@laravel.com](mailto:taylor@laravel.com). All security vulnerabilities will be promptly addressed.
+## Deploy local en Bazzite (staging provisional)
 
-## License
+Kina puede correr en un servidor casero **Bazzite Linux** (Fedora Atomic) para staging/LAN.
+La guía completa paso a paso está en **[`docs/deploy-bazzite.md`](docs/deploy-bazzite.md)**.
 
-The Laravel framework is open-sourced software licensed under the [MIT license](https://opensource.org/licenses/MIT).
+Resumen:
+
+```bash
+# [BAZZITE]  1) Dependencias (rpm-ostree; reinicia una vez)
+./deploy/scripts/bazzite-install-deps.sh && sudo systemctl reboot
+sudo systemctl enable --now mariadb php-fpm nginx firewalld
+
+# 2) Base de datos con usuario dedicado (NO root) — ver guía
+#    CREATE DATABASE kina; CREATE USER 'kina_user'@'localhost' ...
+
+# 3) Proyecto en /var/www/kina
+git clone https://github.com/TU_USUARIO/kina.git /var/www/kina && cd /var/www/kina
+cp .env.bazzite.example .env && php artisan key:generate   # edita DB_* y APP_URL
+
+# 4) Despliegue completo (dependencias, build, migrate, caches, permisos)
+./deploy/scripts/bazzite-deploy.sh
+
+# 5) Nginx + firewall LAN (ver guía) y verificación
+sudo cp deploy/nginx/kina.local.conf /etc/nginx/conf.d/ && sudo nginx -t && sudo systemctl reload nginx
+./deploy/scripts/bazzite-healthcheck.sh
+```
+
+Artefactos de deploy en [`deploy/`](deploy/):
+`nginx/kina.local.conf`, `systemd/kina-queue.service`, `scripts/bazzite-{install-deps,deploy,healthcheck}.sh`.
+Plantilla de entorno: [`.env.bazzite.example`](.env.bazzite.example).
+
+> 🔒 **Seguridad — léelo antes de exponer nada:**
+>
+> - **No** abras el puerto 80/443 del router directo, ni el **3306** de la base de datos.
+> - Acceso externo **solo** vía **Tailscale** o **Cloudflare Tunnel** (con HTTPS).
+> - `APP_DEBUG=false`, DB con `kina_user` (no root), firewall activo, sin `chmod 777`.
+> - **Nunca** subas tu `.env` real a git ni corras `migrate:fresh` en el servidor.
+> - Revisa el **“Checklist antes de encender acceso remoto”** en la guía.
+
+---
+
+## Estructura relevante
+
+```text
+app/Http/Controllers      # incl. Admin/ y flujo de onboarding/chat/descubrir
+app/Services              # CompatibilityService, ProfileVisibilityService, ChatAccessService
+app/Http/Requests         # validación (Form Requests)
+database/migrations       # esquema Kina
+deploy/                   # Nginx, systemd y scripts de Bazzite
+docs/deploy-bazzite.md    # guía de despliegue
+tests/Feature             # cobertura de onboarding, descubrimiento, chat y admin
+```
