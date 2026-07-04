@@ -1,5 +1,8 @@
 <?php
 
+use App\Http\Controllers\Admin\DashboardController as AdminDashboardController;
+use App\Http\Controllers\Admin\ReportController as AdminReportController;
+use App\Http\Controllers\Admin\UserController as AdminUserController;
 use App\Http\Controllers\BlockController;
 use App\Http\Controllers\ConnectionController;
 use App\Http\Controllers\ConnectionRequestController;
@@ -70,6 +73,19 @@ Route::middleware(['auth', 'onboarded'])->group(function () {
     Route::get('/conexiones', [ConnectionController::class, 'index'])->name('conexiones.index');
     Route::get('/conversaciones/{conversation}', [ConversationController::class, 'show'])->name('conversaciones.show');
     Route::post('/conversaciones/{conversation}/mensajes', [ConversationController::class, 'storeMessage'])->name('conversaciones.mensajes.store');
+});
+
+// Fase 6: panel admin (solo administradores; suspendidos ya bloqueados globalmente).
+Route::middleware(['auth', 'admin'])->prefix('admin')->name('admin.')->group(function () {
+    Route::get('/', [AdminDashboardController::class, 'index'])->name('dashboard');
+
+    Route::get('/usuarios', [AdminUserController::class, 'index'])->name('users.index');
+    Route::post('/usuarios/{user}/suspender', [AdminUserController::class, 'suspend'])->name('users.suspend');
+    Route::post('/usuarios/{user}/reactivar', [AdminUserController::class, 'reactivate'])->name('users.reactivate');
+
+    Route::get('/reportes', [AdminReportController::class, 'index'])->name('reports.index');
+    Route::get('/reportes/{report}', [AdminReportController::class, 'show'])->name('reports.show');
+    Route::post('/reportes/{report}/revisar', [AdminReportController::class, 'review'])->name('reports.review');
 });
 
 require __DIR__.'/auth.php';
