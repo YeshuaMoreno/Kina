@@ -1,7 +1,9 @@
 <?php
 
 use App\Http\Controllers\BlockController;
+use App\Http\Controllers\ConnectionController;
 use App\Http\Controllers\ConnectionRequestController;
+use App\Http\Controllers\ConversationController;
 use App\Http\Controllers\DiscoverController;
 use App\Http\Controllers\OnboardingController;
 use App\Http\Controllers\ProfileController;
@@ -63,6 +65,11 @@ Route::middleware(['auth', 'onboarded'])->group(function () {
     Route::get('/solicitudes', [ConnectionRequestController::class, 'index'])->name('solicitudes.index');
     Route::post('/solicitudes/{connectionRequest}/aceptar', [ConnectionRequestController::class, 'accept'])->name('solicitudes.aceptar');
     Route::post('/solicitudes/{connectionRequest}/rechazar', [ConnectionRequestController::class, 'reject'])->name('solicitudes.rechazar');
+
+    // Fase 5: conexiones y chat.
+    Route::get('/conexiones', [ConnectionController::class, 'index'])->name('conexiones.index');
+    Route::get('/conversaciones/{conversation}', [ConversationController::class, 'show'])->name('conversaciones.show');
+    Route::post('/conversaciones/{conversation}/mensajes', [ConversationController::class, 'storeMessage'])->name('conversaciones.mensajes.store');
 });
 
 require __DIR__.'/auth.php';
