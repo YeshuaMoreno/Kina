@@ -1,7 +1,12 @@
 <?php
 
+use App\Http\Controllers\BlockController;
+use App\Http\Controllers\ConnectionRequestController;
+use App\Http\Controllers\DiscoverController;
 use App\Http\Controllers\OnboardingController;
 use App\Http\Controllers\ProfileController;
+use App\Http\Controllers\PublicProfileController;
+use App\Http\Controllers\ReportController;
 use Illuminate\Support\Facades\Route;
 
 // Landing pública (la landing con branding Kina se construye en la Fase 2).
@@ -43,6 +48,21 @@ Route::middleware('auth')->group(function () {
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
     Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
+});
+
+// Fase 4: descubrimiento, perfiles, solicitudes, bloqueos y reportes.
+Route::middleware(['auth', 'onboarded'])->group(function () {
+    Route::get('/descubrir', [DiscoverController::class, 'index'])->name('descubrir.index');
+
+    Route::get('/perfiles/{user}', [PublicProfileController::class, 'show'])->name('perfiles.show');
+    Route::post('/perfiles/{user}/conectar', [ConnectionRequestController::class, 'store'])->name('perfiles.conectar');
+    Route::post('/perfiles/{user}/bloquear', [BlockController::class, 'store'])->name('perfiles.bloquear');
+    Route::get('/perfiles/{user}/reportar', [ReportController::class, 'create'])->name('perfiles.reportar');
+    Route::post('/perfiles/{user}/reportar', [ReportController::class, 'store'])->name('perfiles.reportar.store');
+
+    Route::get('/solicitudes', [ConnectionRequestController::class, 'index'])->name('solicitudes.index');
+    Route::post('/solicitudes/{connectionRequest}/aceptar', [ConnectionRequestController::class, 'accept'])->name('solicitudes.aceptar');
+    Route::post('/solicitudes/{connectionRequest}/rechazar', [ConnectionRequestController::class, 'reject'])->name('solicitudes.rechazar');
 });
 
 require __DIR__.'/auth.php';
