@@ -1,6 +1,9 @@
 <x-app-layout>
     <x-slot name="header">
-        <h2 class="font-serif text-2xl font-semibold text-dark">Solicitudes</h2>
+        <div class="flex items-center justify-between">
+            <h2 class="font-serif text-2xl font-semibold text-dark">Solicitudes</h2>
+            <a href="{{ route('conexiones.index') }}" class="text-sm font-semibold text-malva/70 hover:text-malva">Ver conexiones →</a>
+        </div>
     </x-slot>
 
     <div class="py-8">

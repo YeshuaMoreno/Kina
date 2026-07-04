@@ -16,6 +16,7 @@
                 <div class="hidden sm:flex sm:ms-10 sm:space-x-6 items-center text-sm font-semibold">
                     <a href="{{ route('dashboard') }}" class="inline-flex items-center h-16 px-1 {{ $navLink(request()->routeIs('dashboard')) }}">Inicio</a>
                     <a href="{{ route('descubrir.index') }}" class="inline-flex items-center h-16 px-1 {{ $navLink(request()->routeIs('descubrir.*')) }}">Descubrir</a>
+                    <a href="{{ route('conexiones.index') }}" class="inline-flex items-center h-16 px-1 {{ $navLink(request()->routeIs('conexiones.*') || request()->routeIs('conversaciones.*')) }}">Conexiones</a>
                     <a href="{{ route('solicitudes.index') }}" class="inline-flex items-center h-16 px-1 {{ $navLink(request()->routeIs('solicitudes.*')) }}">Solicitudes</a>
                 </div>
             </div>
@@ -55,6 +56,7 @@
         <div class="pt-2 pb-3 space-y-1">
             <x-responsive-nav-link :href="route('dashboard')" :active="request()->routeIs('dashboard')">Inicio</x-responsive-nav-link>
             <x-responsive-nav-link :href="route('descubrir.index')" :active="request()->routeIs('descubrir.*')">Descubrir</x-responsive-nav-link>
+            <x-responsive-nav-link :href="route('conexiones.index')" :active="request()->routeIs('conexiones.*') || request()->routeIs('conversaciones.*')">Conexiones</x-responsive-nav-link>
             <x-responsive-nav-link :href="route('solicitudes.index')" :active="request()->routeIs('solicitudes.*')">Solicitudes</x-responsive-nav-link>
         </div>
         <div class="pt-4 pb-1 border-t border-lavanda/20">
