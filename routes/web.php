@@ -3,9 +3,10 @@
 use App\Http\Controllers\ProfileController;
 use Illuminate\Support\Facades\Route;
 
+// Landing pública (la landing con branding Kina se construye en la Fase 2).
 Route::get('/', function () {
     return view('welcome');
-});
+})->name('landing');
 
 Route::get('/dashboard', function () {
     return view('dashboard');
