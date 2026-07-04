@@ -18,6 +18,9 @@
                     <a href="{{ route('descubrir.index') }}" class="inline-flex items-center h-16 px-1 {{ $navLink(request()->routeIs('descubrir.*')) }}">Descubrir</a>
                     <a href="{{ route('conexiones.index') }}" class="inline-flex items-center h-16 px-1 {{ $navLink(request()->routeIs('conexiones.*') || request()->routeIs('conversaciones.*')) }}">Conexiones</a>
                     <a href="{{ route('solicitudes.index') }}" class="inline-flex items-center h-16 px-1 {{ $navLink(request()->routeIs('solicitudes.*')) }}">Solicitudes</a>
+                    @if (Auth::user()->is_admin)
+                        <a href="{{ route('admin.dashboard') }}" class="inline-flex items-center h-16 px-1 {{ $navLink(request()->routeIs('admin.*')) }}">Admin</a>
+                    @endif
                 </div>
             </div>
 
@@ -58,6 +61,9 @@
             <x-responsive-nav-link :href="route('descubrir.index')" :active="request()->routeIs('descubrir.*')">Descubrir</x-responsive-nav-link>
             <x-responsive-nav-link :href="route('conexiones.index')" :active="request()->routeIs('conexiones.*') || request()->routeIs('conversaciones.*')">Conexiones</x-responsive-nav-link>
             <x-responsive-nav-link :href="route('solicitudes.index')" :active="request()->routeIs('solicitudes.*')">Solicitudes</x-responsive-nav-link>
+            @if (Auth::user()->is_admin)
+                <x-responsive-nav-link :href="route('admin.dashboard')" :active="request()->routeIs('admin.*')">Admin</x-responsive-nav-link>
+            @endif
         </div>
         <div class="pt-4 pb-1 border-t border-lavanda/20">
             <div class="px-4">
