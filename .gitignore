@@ -3,6 +3,15 @@
 .env
 .env.backup
 .env.production
+.env.bazzite
+
+# Kina · backups locales (NUNCA subir a git)
+/backups
+
+# Archivos ajenos al proyecto (hojas de calculo sueltas, temporales)
+*.xlsx
+*.tmp
+*.bak
 .phpactor.json
 .phpunit.result.cache
 /.fleet
