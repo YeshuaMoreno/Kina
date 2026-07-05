@@ -96,6 +96,33 @@ Plantilla de entorno: [`.env.bazzite.example`](.env.bazzite.example).
 
 ---
 
+## Backups y restore
+
+Respaldo de **base de datos + fotos** (`storage/app/public`). Guía: [`docs/backups.md`](docs/backups.md).
+
+```bash
+# [BAZZITE/servidor]  desde la raíz del proyecto
+./deploy/scripts/backup-kina.sh                 # crea backups/kina-backup-<timestamp>.tar.gz
+./deploy/scripts/restore-kina.sh backups/kina-backup-<timestamp>.tar.gz   # restaura (pide confirmación)
+```
+
+- Los backups van a `backups/` (ignorado por git). **Cópialos fuera del servidor.**
+- No incluye `vendor/`, `node_modules/` ni `public/build` (se regeneran).
+- El `.env` solo se incluye con `--with-env` (es sensible). Nunca subas backups a git.
+
+## Migración futura a cloud
+
+Cuando pases de staging (Bazzite) a un VPS con dominio y HTTPS, sigue
+[`docs/cloud-migration.md`](docs/cloud-migration.md): preparar VPS → clonar → `.env` de
+producción → restaurar backup → build → `migrate --force` → Nginx + Certbot → healthcheck → DNS.
+
+## Antes de una demo
+
+Repasa [`docs/mvp-demo-checklist.md`](docs/mvp-demo-checklist.md): usuarios demo, recorrido
+completo, responsive móvil, cambiar credenciales del admin sembrado y `APP_DEBUG=false`.
+
+---
+
 ## Estructura relevante
 
 ```text
@@ -103,7 +130,8 @@ app/Http/Controllers      # incl. Admin/ y flujo de onboarding/chat/descubrir
 app/Services              # CompatibilityService, ProfileVisibilityService, ChatAccessService
 app/Http/Requests         # validación (Form Requests)
 database/migrations       # esquema Kina
-deploy/                   # Nginx, systemd y scripts de Bazzite
-docs/deploy-bazzite.md    # guía de despliegue
+deploy/nginx, systemd     # config del servidor
+deploy/scripts            # install-deps, deploy, healthcheck, backup, restore
+docs/                     # deploy-bazzite, backups, cloud-migration, mvp-demo-checklist
 tests/Feature             # cobertura de onboarding, descubrimiento, chat y admin
 ```
