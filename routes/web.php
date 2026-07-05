@@ -7,6 +7,7 @@ use App\Http\Controllers\BlockController;
 use App\Http\Controllers\ConnectionController;
 use App\Http\Controllers\ConnectionRequestController;
 use App\Http\Controllers\ConversationController;
+use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\DiscoverController;
 use App\Http\Controllers\OnboardingController;
 use App\Http\Controllers\ProfileController;
@@ -19,9 +20,9 @@ Route::get('/', function () {
     return view('welcome');
 })->name('landing');
 
-Route::get('/dashboard', function () {
-    return view('dashboard');
-})->middleware(['auth', 'verified', 'onboarded'])->name('dashboard');
+Route::get('/dashboard', [DashboardController::class, 'index'])
+    ->middleware(['auth', 'verified', 'onboarded'])
+    ->name('dashboard');
 
 // Onboarding en 7 pasos (requiere sesión, pero NO el gate 'onboarded').
 Route::middleware('auth')->prefix('onboarding')->name('onboarding.')->group(function () {
